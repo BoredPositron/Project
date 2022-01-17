@@ -1,0 +1,388 @@
+#: import SlideTransition kivy.uix.screenmanager.WipeTransition
+#: import get_set_pass data.get_set_pass
+#: import get_set_user data.get_set_user
+#: import get_username data.get_username
+#: import get_password data.get_password
+#: import Factory kivy.factory.Factory
+#: import encrypt enc.encrypt
+#: import decrypt enc.decrypt
+#: import save_theme data.save_theme
+#: import encrypt_settings enc.encrypt_settings
+#: import decrypt_settings enc.decrypt_settings
+#: import add_data data.add_data
+WindowManager:
+    transition: SlideTransition()
+    MainWindow:
+    SecondWindow:
+    ThirdWindow:
+    FourthWindow:
+    FifthWindow:
+    SixthWindow:
+    ChangeUsername:
+    ChangePassword
+
+
+<MainWindow>:
+    name: "main"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius:[10,]
+        border_radius:10
+        size_hint: None, None
+        size: 600, 400
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+
+        MDLabel:
+            opacity: 5
+            id: welcome_label
+            text: "Log In"
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: "60"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+            pos_hint: {"center_x": 0.5, "center_y":.8}
+        MDTextFieldRound:
+            id: user
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Username"
+            icon_right: "account"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.53}
+        MDTextFieldRound:
+            id: password
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Password"
+            icon_right: "eye-off"
+            size_hint_x: None
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+            password: True
+        MDRoundFlatButton:
+            text: "Log In"
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: 18
+            pos_hint: {"center_x":0.5, "center_y": 0.31}
+            on_release:
+                app.root.current = "second" if user.text == get_set_user() and password.text == get_set_pass() else "main"
+
+
+<SecondWindow>:
+    name: "second"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius: 10
+        size_hint: None, None
+        size: 1080, 560
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        GridLayout:
+            opacity: 5
+            rows: 3
+            cols: 2
+            Button:
+                text: "Add New Entry to DataBase"
+                on_release: app.root.current = "adddata"
+            Button:
+                text: "View Credentials for an account"
+                on_release: app.root.current = "viewdatavalid"
+            Button:
+                text: "Settings"
+                on_release: app.root.current = "settings"
+            Button:
+                text: "Exit app"
+                on_press:
+                    app.stop()
+
+<ThirdWindow>:
+    name: "adddata"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius: 10
+        size_hint: None, None
+        size: 600, 400
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        MDLabel:
+            opacity: 5
+            id: welcome_label
+            text: "Enter Credentials"
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: "48"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+            pos_hint: {"center_x": 0.5, "center_y":.75}
+        MDTextField:
+            id: welp
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Username"
+            icon_right: "account"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.53}
+        MDTextField:
+            id: passwo
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Password"
+            icon_right: "eye-off"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+            password: True
+        MDTextField:
+            id: website
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter name of website"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+        MDFlatButton:
+            opacity: 5
+            text: "Submit"
+            pos_hint: {"center_x":0.5, "center_y": 0.31}
+            on_release:
+                add_data(welp.text, passwo.text, website.text)
+                app.root.current = "second"
+    Button:
+        text: "Go Back"
+        pos_hint: {"center_x": 0.35 , "center_y":0.7}
+        size_hint: 0.05, 0.05
+        on_release: app.root.current = "second"
+<FourthWindow>:
+    name: "viewdatavalid"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+
+    MDCard:
+        radius: 10
+        size_hint: None, None
+        size: 600, 400
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        MDRoundFlatButton:
+            text: "Go Back"
+            on_release:
+                app.root.current = "second"
+                root.manager.transition.direction = 'right'
+        MDLabel:
+            opacity: 5
+            id: validation
+            text: "Enter website name and master password"
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: "48"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 10
+            pos_hint: {"center_x": 0.5, "center_y":.75}
+        MDTextField:
+            id: websitename
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter name of website"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.4}
+        Button:
+            opacity: 5
+            text: "View Credentials"
+            pos_hint: {"center_x": 0.5}
+            size_hint: 0.3, 0.1
+            on_release: app.password_copied_dialog(websitename.text)
+<SixthWindow>:
+    name: "settings"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius: 10
+        size_hint: None, None
+        size: 600, 400
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        GridLayout:
+            opacity: 5
+            rows: 3
+            Button:
+                text: "Change Username"
+                on_release: app.root.current = "change_username"
+            Button:
+                text: "Change Password"
+                on_release: app.root.current = "change_password"
+            Button:
+                text: "Change theme"
+                on_release:
+                    save_theme()
+                    app.theme_changed_dialog()
+<ChangeUsername>:
+    name: "change_username"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius:[10,]
+        border_radius:10
+        size_hint: None, None
+        size: 600, 300
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        MDLabel:
+            opacity: 5
+            id: welcome_label
+            text: "Enter New Username"
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: "60"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+            pos_hint: {"center_x": 0.5, "center_y":.8}
+        MDTextFieldRound:
+            id: usern
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Username"
+            icon_right: "account"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.53}
+        MDRoundFlatButton:
+            text: "Change Username"
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: 18
+            pos_hint: {"center_x":0.5, "center_y": 0.31}
+            on_release:
+                decrypt_settings()
+                sign(usern.text, get_set_pass(), "settings")
+                encrypt_settings()
+                app.username_changed_dialog()
+    Button:
+        text: "Go Back"
+        pos_hint: {"center_x": 0.35 , "center_y":0.65}
+        size_hint: 0.05, 0.05
+        on_release: app.root.current = "second"
+<ChangePassword>:
+    name: "change_password"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
+    MDCard:
+        radius:[10,]
+        border_radius:10
+        size_hint: None, None
+        size: 600, 300
+        pos_hint: {"center_x": 0.5, "center_y":0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: "vertical"
+        opacity: 0.2
+        MDLabel:
+            opacity: 5
+            id: welcome_label
+            text: "Enter New Password"
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: "60"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+            pos_hint: {"center_x": 0.5, "center_y":.8}
+        MDTextFieldRound:
+            id: pasd
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            hint_text: "Enter Password"
+            icon_right: "account"
+            size_hint_x: None
+            height: 40
+            width: 400
+            font_size: 24
+            pos_hint: {"center_x": 0.5, "center_y": 0.53}
+            password: True
+        MDRoundFlatButton:
+            text: "Change Password"
+            opacity: 5
+            font_name: "Hosobiki-v4Z.ttf"
+            font_size: 18
+            pos_hint: {"center_x":0.5, "center_y": 0.31}
+            on_release:
+                decrypt_settings()
+                sign(get_set_user(), pasd.text, "settings")
+                encrypt_settings()
+                app.password_changed_dialog()
+    Button:
+        text: "Go Back"
+        pos_hint: {"center_x": 0.35 , "center_y":0.65}
+        size_hint: 0.05, 0.05
+        on_release: app.root.current = "second"
